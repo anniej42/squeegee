@@ -3,20 +3,36 @@
 <head>
 <title>natie squeegee</title>
 </head>
-<body></body>
+<body>
+  <div>
+  <button id="toggle"> toggle hot/cold shower! </button>
+  </div>
+  <div id="view"></div>
+</body>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 
 <script>
 
-var svg = d3.select("body").append("svg");
+var svg = d3.select("div#view").append("svg");
 
 //Config
 var circleRadius = 50;
 var blurAmount = 20;
 var clipDelay = 200;
-var clipDuration = 10000;
+var mode=0;
+var clipDuration = 20000;
 var clipEase = 'quad'; //quad and circle look good
+
+$("#toggle").click(function(){
+  mode = 1-mode;
+  if (mode==0){
+    clipDuration = 20000;
+  } else {
+    clipDuration = 5;
+  }
+});
+
 
 //CLIP
 var clips = svg.append('svg:defs')
