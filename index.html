@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<title>natie squeegee</title>
+</head>
+<body></body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+<script>
+
+var svg = d3.select("body").append("svg");
+
+//Config
+var circleRadius = 50;
+var blurAmount = 20;
+var clipDelay = 200;
+var clipDuration = 10000;
+var clipEase = 'quad'; //quad and circle look good
+
+//CLIP
+var clips = svg.append('svg:defs')
+    .append('svg:mask')
+    .attr({id: 'mask'});
+
+var addMask = function addMask(x,y){
+    //To achieve the unblur effect, we add circles to the clip mask
+    var clip = clips.append('svg:circle')
+        .attr({ 
+            cx: x, 
+            cy: y, 
+            r: circleRadius, 
+            fill: '#ffffff',
+            'class': 'clipCircle'
+        });
+  return clip;
+};
+
+//Blur filter
+var defs = svg.append('svg:defs');
+var filterBlur = defs.append('svg:filter')
+  .attr({ id: 'blur' });
+filterBlur.append('feGaussianBlur')
+    .attr({
+          'in': "SourceGraphic",
+          'stdDeviation': blurAmount
+    });
+
+//GENERATE IMAGE
+
+var i = ~~(Math.random()*2)+1
+var imageUrl = i+'.jpg';
+
+//Add blurred image
+var img = svg.append('svg:image')
+    .attr({
+      x: 0,
+      y: 0,
+      filter: 'url(#blur)',
+      'xlink:href': imageUrl,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      fill: '#336699'
+    })
+
+//MASK
+//  Add masked image (regular, non blurred image which will be revealed
+var mask = svg.append('svg:image')
+    .attr({
+        x: 0,
+        y: 0,
+        'xlink:href': imageUrl,
+        'mask': 'url(#mask)',
+        width: window.innerWidth,
+        height: window.innerHeight, 
+        filter: 'url(#blur2)',
+        fill: '#336699'
+    });
+
+var mouseMove = function move(e){
+    //erase on mouse over
+    var x = parseInt(d3.event.pageX - 25 + circleRadius/2,10);
+    var y = parseInt(d3.event.pageY - 25 - circleRadius,10);
+
+    //Add mask
+    var clip = addMask(x,y);
+
+    clip.transition().ease(clipEase)
+        .delay(clipDelay)
+        .duration(clipDuration)
+        .attr({ 
+            fill: '#000000', 
+            r: 0
+        })
+        .each('end', function end(){
+            this.remove();
+        })
+
+};
+//attach event
+svg.on('mousemove', mouseMove);
+resize();
+// window.onresize = resize;
+$( window ).resize(function() {
+    width = window.innerWidth || e.clientWidth || g.clientWidth;;
+    height = window.innerHeight || e.clientHeight|| g.clientHeight;;
+
+    svg.attr("width", width).attr("height", height);
+    img.attr("width", width).attr("height", height);
+    mask.attr("width", width).attr("height", height);
+    console.log(width);
+    console.log(height)
+});
+
+  function resize() {
+    width = window.innerWidth || e.clientWidth || g.clientWidth;;
+    height = window.innerHeight || e.clientHeight|| g.clientHeight;;
+
+    svg.attr("width", width).attr("height", height);
+    img.attr("width", width).attr("height", height);
+    mask.attr("width", width).attr("height", height);
+    console.log(width);
+    console.log(height)
+  }
+
+
+</script>
