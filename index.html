@@ -4,6 +4,12 @@
 <title>natie squeegee</title>
 </head>
 <body>
+
+  <style>
+  svg {
+    cursor:url("cursor.png"), auto;
+  }
+  </style>
   <div>
   <button id="toggle"> toggle hot/cold shower! </button>
   </div>
@@ -130,7 +136,7 @@ $( window ).resize(function() {
 
   function resize() {
     width = window.innerWidth || e.clientWidth || g.clientWidth;;
-    height = window.innerHeight || e.clientHeight|| g.clientHeight;;
+    height = window.innerHeight || e.clientHeight|| g.clientHeight;
 
     svg.attr("width", width).attr("height", height);
     img.attr("width", width).attr("height", height);
