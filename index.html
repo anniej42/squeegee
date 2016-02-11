@@ -6,16 +6,23 @@
 <body>
 
   <style>
-  svg {
+/*  svg {
     cursor:url("cursor.png"), auto;
+  }*/
+  #squeegee{
+    position: absolute;
+    z-index: 20;
+    /*top: 10%;*/
   }
   </style>
   <div>
   <button id="toggle"> toggle hot/cold shower! </button>
   </div>
   <div id="view"></div>
+  <div id="squeegee"><img id="cursor" src= "cursor.png"></img></div>
 </body>
 <script src="//d3js.org/d3.v3.min.js"></script>
+<script src="paper-core.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 
 <script>
@@ -29,6 +36,10 @@ var clipDelay = 200;
 var mode=0;
 var clipDuration = 20000;
 var clipEase = 'quad'; //quad and circle look good
+// var prevPoint = new paper.Point(0,0);
+var prevPoint = {"x":0, "y":0};
+var  curPoint = {"x":0, "y":0};
+var cursorAngle;
 
 $("#toggle").click(function(){
   mode = 1-mode;
@@ -99,8 +110,33 @@ var mask = svg.append('svg:image')
         fill: '#336699'
     });
 
+// function mouseDown(e){
+//   prevPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
+//   svg.on('mousemove', mouseMove);
+
+// }
+
 var mouseMove = function move(e){
     //erase on mouse over
+
+    // var curPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
+    curPoint.x = d3.event.pageX
+    curPoint.y = d3.event.pageY;
+    var vector = new paper.Point(curPoint.x -prevPoint.x, curPoint.y -prevPoint.y);
+    var cursorAngle = vector.angle + 90;
+
+    $("#cursor").css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#cursor").css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#cursor").css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#cursor").css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
+
+    $("#squeegee").css("left", curPoint.x);
+    $("#squeegee").css("top", curPoint.y);
+
+    // prevPoint = curPoint;
+    prevPoint.x = curPoint.x;
+    prevPoint.y = curPoint.y;
+
     var x = parseInt(d3.event.pageX - 25 + circleRadius/2,10);
     var y = parseInt(d3.event.pageY - 25 - circleRadius,10);
 
@@ -117,10 +153,15 @@ var mouseMove = function move(e){
         .each('end', function end(){
             this.remove();
         })
-
 };
+
+// function mouseUp(e){
+//   $(this).unbind("mousemove");
+// }
 //attach event
+// svg.on('mousedown', mouseDown);
 svg.on('mousemove', mouseMove);
+// svg.on('mouseup', mouseUp);
 resize();
 // window.onresize = resize;
 $( window ).resize(function() {
