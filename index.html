@@ -1,104 +1,154 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<head>
-<title>natie squeegee</title>
-</head>
-<body>
 
-  <style>
-/*  svg {
+<head>
+    <title>natie squeegee</title>
+</head>
+
+<body>
+    <style>
+    /*  svg {
     cursor:url("cursor.png"), auto;
   }*/
-  #squeegee{
-    position: absolute;
-    z-index: 20;
-    /*top: 10%;*/
-    background-image: url("cursor.png");
-    width: 125px;
-    height: 51px;
-  }
-  </style>
-  <div>
-  <button id="toggle"> toggle hot/cold shower! </button>
-  </div>
-  <div id="view"></div>
-  <div id="squeegee">
-  <!-- <img id="cursor" src= "cursor.png"></img> -->
-  </div>
+    
+    #squeegee {
+        position: absolute;
+        cursor: none;
+        z-index: 20;
+        /*top: 10%;*/
+        background-image: url("cursor.png");
+        width: 125px;
+        height: 51px;
+    }
+    /*  .firefly{
+                width: 278px;
+                height: 20px;
+                background-image: -webkit-linear-gradient(right, #000000 25%,
+                
+                                                                 #ffffff 25%,
+                                                                 #ffffff 75%,
+                                                         
+                                                                 #000000 75%);
+                border-radius: 10px;
+                position: relative;
+                zoom: 50%;
+                -webkit-transform-origin: 100% center;
+            }
+
+            .firefly .wings{
+                position: absolute;
+            }
+
+            .firefly .wings.big{
+                -webkit-transform-origin: 100% center;
+                border-left: 32px solid transparent;
+                border-right: 32px solid transparent;
+            }
+            .firefly .wings.big.one{
+                width: 150px;
+                height: 15px;
+                background-image: -webkit-linear-gradient(right, #ffffff 25%,
+                
+                                                                 #000000 25%);
+                border-radius: 10px;
+                top: 19px;
+                -webkit-transform-origin: center 0%;
+                -webkit-transform: rotate(-90deg);
+            }*/
+    </style>
+    <div>
+        <button id="toggle"> toggle hot/cold shower! </button>
+    </div>
+    <div id="view"></div>
+    <div id="squeegee">
+        <!-- <img id="cursor" src= "cursor.png"></img> -->
+        <!-- <div class="firefly"> -->
+        <!-- <div class="wings big one"></div> -->
+        <!-- </div> -->
+    </div>
 </body>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script src="paper-core.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-
 <script>
-
 var svg = d3.select("div#view").append("svg");
 
 //Config
 var circleRadius = 50;
 var blurAmount = 20;
 var clipDelay = 200;
-var mode=0;
+var mode = 0;
 var clipDuration = 20000;
 var clipEase = 'quad'; //quad and circle look good
 // var prevPoint = new paper.Point(0,0);
-var prevPoint = {"x":0, "y":0};
-var  curPoint = {"x":0, "y":0};
+var prevPoint = {
+    "x": 0,
+    "y": 0
+};
+var curPoint = {
+    "x": 0,
+    "y": 0
+};
 var cursorAngle;
+var squeegee = $("#squeegee")
 
-$("#toggle").click(function(){
-  mode = 1-mode;
-  if (mode==0){
-    clipDuration = 20000;
-  } else {
-    clipDuration = 5;
-  }
+$("#toggle").click(function() {
+    mode = 1 - mode;
+    if (mode == 0) {
+        clipDuration = 20000;
+    } else {
+        clipDuration = 5;
+    }
 });
 
 
 //CLIP
 var clips = svg.append('svg:defs')
     .append('svg:mask')
-    .attr({id: 'mask'});
+    .attr({
+        id: 'mask'
+    });
 
-var addMask = function addMask(x,y){
+var addMask = function addMask(x, y) {
     //To achieve the unblur effect, we add circles to the clip mask
     var clip = clips.append('svg:circle')
-        .attr({ 
-            cx: x, 
-            cy: y, 
-            r: circleRadius, 
+        .attr({
+            cx: x,
+            cy: y,
+            r: circleRadius,
             fill: '#ffffff',
             'class': 'clipCircle'
         });
-  return clip;
+    return clip;
 };
 
 //Blur filter
 var defs = svg.append('svg:defs');
 var filterBlur = defs.append('svg:filter')
-  .attr({ id: 'blur' });
+    .attr({
+        id: 'blur'
+    });
 filterBlur.append('feGaussianBlur')
     .attr({
-          'in': "SourceGraphic",
-          'stdDeviation': blurAmount
+        'in': "SourceGraphic",
+        'stdDeviation': blurAmount
     });
 
 //GENERATE IMAGE
 
-var i = ~~(Math.random()*2)+1
-var imageUrl = i+'.jpg';
+var i = ~~(Math.random() * 2) + 1
+var imageUrl = i + '.jpg';
 
 //Add blurred image
 var img = svg.append('svg:image')
     .attr({
-      x: 0,
-      y: 0,
-      filter: 'url(#blur)',
-      'xlink:href': imageUrl,
-      width: window.innerWidth,
-      height: window.innerHeight,
-      fill: '#336699'
+        x: 0,
+        y: 0,
+        filter: 'url(#blur)',
+        'xlink:href': imageUrl,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        fill: '#336699'
     })
 
 //MASK
@@ -110,7 +160,7 @@ var mask = svg.append('svg:image')
         'xlink:href': imageUrl,
         'mask': 'url(#mask)',
         width: window.innerWidth,
-        height: window.innerHeight, 
+        height: window.innerHeight,
         filter: 'url(#blur2)',
         fill: '#336699'
     });
@@ -121,41 +171,41 @@ var mask = svg.append('svg:image')
 
 // }
 
-var mouseMove = function move(e){
+var mouseMove = function move(e) {
     //erase on mouse over
 
     // var curPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
     curPoint.x = d3.event.pageX
     curPoint.y = d3.event.pageY;
-    var vector = new paper.Point(curPoint.x -prevPoint.x, curPoint.y -prevPoint.y);
+    var vector = new paper.Point(curPoint.x - prevPoint.x, curPoint.y - prevPoint.y);
     var cursorAngle = vector.angle + 90;
 
-    $("#squeegee").css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
-    $("#squeegee").css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
-    $("#squeegee").css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
-    $("#squeegee").css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
+    squeegee.css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
+    squeegee.css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
+    squeegee.css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
+    squeegee.css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
 
-    $("#squeegee").css("left", curPoint.x);
-    $("#squeegee").css("top", curPoint.y);
+    squeegee.css("left", curPoint.x);
+    squeegee.css("top", curPoint.y);
 
     // prevPoint = curPoint;
     prevPoint.x = curPoint.x;
     prevPoint.y = curPoint.y;
 
-    var x = parseInt(d3.event.pageX - 25 + circleRadius/2,10);
-    var y = parseInt(d3.event.pageY - 25 - circleRadius,10);
+    var x = parseInt(d3.event.pageX - 25 + circleRadius / 2, 10);
+    var y = parseInt(d3.event.pageY - 25 - circleRadius, 10);
 
     //Add mask
-    var clip = addMask(x,y);
+    var clip = addMask(x, y);
 
     clip.transition().ease(clipEase)
         .delay(clipDelay)
         .duration(clipDuration)
-        .attr({ 
-            fill: '#000000', 
+        .attr({
+            fill: '#000000',
             r: 0
         })
-        .each('end', function end(){
+        .each('end', function end() {
             this.remove();
         })
 };
@@ -169,23 +219,21 @@ svg.on('mousemove', mouseMove);
 // svg.on('mouseup', mouseUp);
 resize();
 // window.onresize = resize;
-$( window ).resize(function() {
+$(window).resize(function() {
     width = window.innerWidth || e.clientWidth || g.clientWidth;;
-    height = window.innerHeight || e.clientHeight|| g.clientHeight;;
+    height = window.innerHeight || e.clientHeight || g.clientHeight;;
 
     svg.attr("width", width).attr("height", height);
     img.attr("width", width).attr("height", height);
     mask.attr("width", width).attr("height", height);
 });
 
-  function resize() {
+function resize() {
     width = window.innerWidth || e.clientWidth || g.clientWidth;;
-    height = window.innerHeight || e.clientHeight|| g.clientHeight;
+    height = window.innerHeight || e.clientHeight || g.clientHeight;
 
     svg.attr("width", width).attr("height", height);
     img.attr("width", width).attr("height", height);
     mask.attr("width", width).attr("height", height);
-  }
-
-
+}
 </script>
