@@ -13,13 +13,18 @@
     position: absolute;
     z-index: 20;
     /*top: 10%;*/
+    background-image: url("cursor.png");
+    width: 125px;
+    height: 51px;
   }
   </style>
   <div>
   <button id="toggle"> toggle hot/cold shower! </button>
   </div>
   <div id="view"></div>
-  <div id="squeegee"><img id="cursor" src= "cursor.png"></img></div>
+  <div id="squeegee">
+  <!-- <img id="cursor" src= "cursor.png"></img> -->
+  </div>
 </body>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script src="paper-core.min.js"></script>
@@ -125,10 +130,10 @@ var mouseMove = function move(e){
     var vector = new paper.Point(curPoint.x -prevPoint.x, curPoint.y -prevPoint.y);
     var cursorAngle = vector.angle + 90;
 
-    $("#cursor").css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
-    $("#cursor").css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
-    $("#cursor").css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
-    $("#cursor").css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#squeegee").css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#squeegee").css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#squeegee").css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
+    $("#squeegee").css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
 
     $("#squeegee").css("left", curPoint.x);
     $("#squeegee").css("top", curPoint.y);
@@ -171,8 +176,6 @@ $( window ).resize(function() {
     svg.attr("width", width).attr("height", height);
     img.attr("width", width).attr("height", height);
     mask.attr("width", width).attr("height", height);
-    console.log(width);
-    console.log(height)
 });
 
   function resize() {
@@ -182,8 +185,6 @@ $( window ).resize(function() {
     svg.attr("width", width).attr("height", height);
     img.attr("width", width).attr("height", height);
     mask.attr("width", width).attr("height", height);
-    console.log(width);
-    console.log(height)
   }
 
 
