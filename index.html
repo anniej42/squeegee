@@ -71,6 +71,7 @@
         <!-- </div> -->
     </div>
 </body>
+
 <script>
 var svg = d3.select("div#view").append("svg");
 
@@ -79,6 +80,7 @@ var circleRadius = 50;
 var blurAmount = 20;
 var clipDelay = 200;
 var mode = 0;
+var img, svg, mask;
 var clipDuration = 20000;
 var clipEase = 'quad'; //quad and circle look good
 // var prevPoint = new paper.Point(0,0);
@@ -135,36 +137,6 @@ filterBlur.append('feGaussianBlur')
         'stdDeviation': blurAmount
     });
 
-//GENERATE IMAGE
-
-var i = ~~(Math.random() * 2) + 1
-var imageUrl = i + '.jpg';
-
-//Add blurred image
-var img = svg.append('svg:image')
-    .attr({
-        x: 0,
-        y: 0,
-        filter: 'url(#blur)',
-        'xlink:href': imageUrl,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        fill: '#336699'
-    })
-
-//MASK
-//  Add masked image (regular, non blurred image which will be revealed
-var mask = svg.append('svg:image')
-    .attr({
-        x: 0,
-        y: 0,
-        'xlink:href': imageUrl,
-        'mask': 'url(#mask)',
-        width: window.innerWidth,
-        height: window.innerHeight,
-        filter: 'url(#blur2)',
-        fill: '#336699'
-    });
 
 // function mouseDown(e){
 //   prevPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
@@ -215,43 +187,66 @@ var mouseMove = function move(e) {
 //   $(this).unbind("mousemove");
 // }
 //attach event
-// svg.on('mousedown', mouseDown);
-svg.on('mousemove', mouseMove);
-// svg.on('mouseup', mouseUp);
-resize();
+
 // window.onresize = resize;
-$(window).resize(function() {
-    width = window.innerWidth || e.clientWidth || g.clientWidth;;
-    height = window.innerHeight || e.clientHeight || g.clientHeight;;
 
-    svg.attr("width", width).attr("height", height);
-    img.attr("width", width).attr("height", height);
-    mask.attr("width", width).attr("height", height);
-});
-
-function resize() {
-    width = window.innerWidth || e.clientWidth || g.clientWidth;;
-    height = window.innerHeight || e.clientHeight || g.clientHeight;
-
-    svg.attr("width", width).attr("height", height);
-    img.attr("width", width).attr("height", height);
-    mask.attr("width", width).attr("height", height);
-}
 
 $(document).ready(function() {
+    var imageUrl;
     _500px.init({
         sdk_key: 'ff6d61fac0e96e8c54f17f9bef8674230426f07e',
         "consumer_key": "toNzUXsgWhv6knJFYzFEaALwZyJosUTAAta9Rh3D"
     });
+
     _500px.api('/photos', 'get', {
-        rpp: 1,
-        "feature": "popular",
+        rpp: 20,
+        "feature": "editor",
         "image_size": "2048",
-        "only" : "8"
+        "only": "Landscapes",
+        "exclude": "People, Nude"
     }, function(response) {
-      console.log(response)
         if (response.success) {
-            console.log(response.data.photos[0].image_url)
+            // console.log(response.data.photos[0].image_url)
+            var i = Math.floor(Math.random() * 20);
+            imageUrl = response.data.photos[i].image_url;
+            //Add blurred image
+            img = svg.append('svg:image')
+                .attr({
+                    x: 0,
+                    y: 0,
+                    filter: 'url(#blur)',
+                    'xlink:href': imageUrl,
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    fill: '#336699'
+                })
+
+            //MASK
+            //  Add masked image (regular, non blurred image which will be revealed
+            mask = svg.append('svg:image')
+                .attr({
+                    x: 0,
+                    y: 0,
+                    'xlink:href': imageUrl,
+                    'mask': 'url(#mask)',
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    filter: 'url(#blur2)',
+                    fill: '#336699'
+                });
+            $(window).resize(resize);
+
+            function resize() {
+                width = window.innerWidth || e.clientWidth || g.clientWidth;;
+                height = window.innerHeight || e.clientHeight || g.clientHeight;
+
+                svg.attr("width", width).attr("height", height);
+                img.attr("width", width).attr("height", height);
+                mask.attr("width", width).attr("height", height);
+            }
+            svg.on('mousemove', mouseMove);
+            resize();
+
         } else {
             console.log("failed")
         }
