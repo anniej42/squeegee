@@ -3,26 +3,28 @@
 
 <head>
     <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="paper-core.min.js"></script>
+    <script src="js/paper-core.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="500px.js"></script>
+    <script src="js/500px.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
     <title>natie squeegee</title>
 </head>
 
 <body>
-    <style>
-    #squeegee {
-        position: absolute;
-        cursor: crosshair;
-        z-index: 20;
-        /*top: 10%;*/
-        background-image: url("cursor.png");
-        width: 125px;
-        height: 51px;
-    }
-    </style>
+    <ul class="sub-nav menu" role="navigation" title="Filter Menu List">
+        <li class="sub-nav-title">category</li>
+        <li id="" class="active">       <a>All</a></li>
+        <li id="Food">                  <a>Food</a></li>
+        <li id="Travel">                <a>Travel</a></li>
+        <li id="Street">                <a>Street</a></li>
+        <li id="Nature">                <a>Nature</a></li>
+        <li><input value="custom..."></input></li>
+        <li><button id="toggle"> toggle hot/cold shower </button></li>
+    </ul>
     <div>
-        <button id="toggle"> toggle hot/cold shower! </button>
+        
     </div>
     <div id="view"></div>
     <div id="squeegee">
@@ -32,17 +34,16 @@
         <!-- </div> -->
     </div>
 </body>
-
 <script>
 var svg = d3.select("div#view").append("svg");
 
 //Config
-var circleRadius = 50;
+var circleRadius = 100;
 var blurAmount = 20;
 var clipDelay = 200;
 var mode = 0;
 var img, svg, mask;
-var clipDuration = 20000;
+var clipDuration = 30000;
 var clipEase = 'quad'; //quad and circle look good
 // var prevPoint = new paper.Point(0,0);
 var prevPoint = {
@@ -84,6 +85,53 @@ var addMask = function addMask(x, y) {
         });
     return clip;
 };
+
+$("li").on("click", function(){
+  $("li").removeClass("active");
+  $(this).addClass("active")
+  var category = $(this).attr("id");
+  console.log(category)
+  _500px.api('/photos', 'get', {
+        rpp: 20,
+        "feature": "editor",
+        "image_size": "2048",
+        "only": category,
+        "exclude": "People, Nude"
+    }, function(response) {
+        if (response.success) {
+          console.log(response)
+            var i = Math.floor(Math.random() * 20);
+            imageUrl = response.data.photos[i].image_url;
+            //Add blurred image
+            img = svg.append('svg:image')
+                .attr({
+                    x: 0,
+                    y: 0,
+                    filter: 'url(#blur)',
+                    'xlink:href': imageUrl,
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    fill: '#336699'
+                })
+
+            //MASK
+            //  Add masked image (regular, non blurred image which will be revealed
+            mask = svg.append('svg:image')
+                .attr({
+                    x: 0,
+                    y: 0,
+                    'xlink:href': imageUrl,
+                    'mask': 'url(#mask)',
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    filter: 'url(#blur2)',
+                    fill: '#336699'
+                });
+        } else {
+            console.log("failed")
+        }
+    });
+})
 
 //Blur filter
 var defs = svg.append('svg:defs');
@@ -155,11 +203,10 @@ $(document).ready(function() {
         rpp: 20,
         "feature": "editor",
         "image_size": "2048",
-        "only": "Landscapes",
+        "only": "",
         "exclude": "People, Nude"
     }, function(response) {
         if (response.success) {
-            // console.log(response.data.photos[0].image_url)
             var i = Math.floor(Math.random() * 20);
             imageUrl = response.data.photos[i].image_url;
             //Add blurred image

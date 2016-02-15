@@ -1,0 +1,33 @@
+    #squeegee {
+        position: absolute;
+        z-index: 20;
+        /*top: 10%;*/
+        background-image: url("cursor.png");
+        width: 125px;
+        height: 51px;
+    }
+    
+    .sub-nav {
+        background-color: #f2f2f2;
+        padding: 0.5rem 0.5rem 0.5rem 0;
+    }
+    
+    .sub-nav li {
+        color: #999999;
+        font-size: 0.8rem;
+        padding-left: 1rem;
+    }
+    
+    .sub-nav li.active a {
+        border-radius: 5px;
+        border: 2px solid #2199e8;
+        color: black;
+        cursor: default;
+        padding: 0.12rem 0.6rem;
+    }
+
+    input {
+      padding: 5px;
+      border-radius: 15px;
+      border-color: transparent;
+    }
