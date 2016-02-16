@@ -16,13 +16,15 @@
 <body>
     <ul class="sub-nav menu" role="navigation" title="Filter Menu List">
         <li class="sub-nav-title">category</li>
-        <li id="" class="active"> <a>All</a></li>
-        <li id="Food"> <a>Food</a></li>
-        <li id="Travel"> <a>Travel</a></li>
-        <li id="Street"> <a>Street</a></li>
-        <li id="Nature"> <a>Nature</a></li>
-        <li>
-            <input value="custom..."></input>
+        <li id="" class="category active"> <a>All</a></li>
+        <li class="category" id="Food"> <a>Food</a></li>
+        <li class="category" id="Travel"> <a>Travel</a></li>
+        <li class="category" id="Street"> <a>Street</a></li>
+        <li class="category" id="Nature"> <a>Nature</a></li>
+        <li id="customField">
+            <input id="custom" placeholder="custom..."></input>
+            <!-- <div id="placeButton"></div> -->
+            <!-- <input id="submit" type="submit"></input> -->
         </li>
         <li>
             <button id="toggle"> toggle hot/cold shower </button>
@@ -90,56 +92,26 @@ var addMask = function addMask(x, y) {
     return clip;
 };
 
-$("li").on("click", function() {
+
+$(".category").on("click", function() {
     // svg.html("");
     svg.selectAll("image").remove();
-    $("li").removeClass("active");
+
+    $(".category").removeClass("active");
     $(this).addClass("active")
     var category = $(this).attr("id");
-
-    console.log(category)
-    _500px.api('/photos', 'get', {
-        rpp: 20,
-        "feature": "editor",
-        "image_size": "2048",
-        "only": category,
-        "exclude": "People, Nude"
-    }, function(response) {
-        if (response.success) {
-            console.log(response)
-            d3.select("image").remove();
-            var i = Math.floor(Math.random() * 20);
-            imageUrl = response.data.photos[i].image_url;
-            //Add blurred image
-            img = svg.append('svg:image')
-                .attr({
-                    x: 0,
-                    y: 0,
-                    filter: 'url(#blur)',
-                    'xlink:href': imageUrl,
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    fill: '#336699'
-                })
-
-            //MASK
-            //  Add masked image (regular, non blurred image which will be revealed
-            mask = svg.append('svg:image')
-                .attr({
-                    x: 0,
-                    y: 0,
-                    'xlink:href': imageUrl,
-                    'mask': 'url(#mask)',
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    filter: 'url(#blur2)',
-                    fill: '#336699'
-                });
-        } else {
-            console.log("failed")
-        }
-    });
+    getImage(category)
 })
+
+$("input").keyup(function (e) {
+    if (e.keyCode == 13) {
+        svg.selectAll("image").remove();
+        $(".category").removeClass("active");
+        var category = $(this).val();
+        console.log(category)
+        searchImage(category);
+    }
+});
 
 //Blur filter
 var defs = svg.append('svg:defs');
@@ -158,6 +130,7 @@ var enableHandler = true;
 timer = window.setInterval(function() {
     enableHandler = true;
 }, 200);
+
 
 var mouseMove = function move(e) {
     //erase on mouse over
@@ -212,14 +185,6 @@ var mouseMove = function move(e) {
         })
 };
 
-// function mouseUp(e){
-//   $(this).unbind("mousemove");
-// }
-//attach event
-
-// window.onresize = resize;
-
-
 $(document).ready(function() {
     var imageUrl;
     _500px.init({
@@ -227,14 +192,23 @@ $(document).ready(function() {
         "consumer_key": "toNzUXsgWhv6knJFYzFEaALwZyJosUTAAta9Rh3D"
     });
 
+    getImage(" ");
+    $(window).resize(resize);
+    svg.on('mousemove', mouseMove);
+    resize();
+});
+
+function getImage(category) {
     _500px.api('/photos', 'get', {
         rpp: 20,
         "feature": "editor",
         "image_size": "2048",
-        "only": "",
+        "only": category,
         "exclude": "People, Nude"
     }, function(response) {
         if (response.success) {
+            console.log(response)
+            d3.select("image").remove();
             var i = Math.floor(Math.random() * 20);
             imageUrl = response.data.photos[i].image_url;
             //Add blurred image
@@ -262,23 +236,63 @@ $(document).ready(function() {
                     filter: 'url(#blur2)',
                     fill: '#336699'
                 });
-            $(window).resize(resize);
+        } else {
+            console.log("failed")
+        }
+    });
+}
 
-            function resize() {
-                width = window.innerWidth || e.clientWidth || g.clientWidth;;
-                height = window.innerHeight || e.clientHeight || g.clientHeight;
+function searchImage(term){
+  _500px.api('/photos/search', 'get', {
+        rpp: 20,
+        term: term,
+        "feature": "editor",
+        "image_size": "2048",
+        "exclude": "People, Nude"
+    }, function(response) {
+        if (response.success) {
+            console.log(response)
+            d3.select("image").remove();
+            var i = Math.floor(Math.random() * 20);
+            imageUrl = response.data.photos[i].image_url;
+            //Add blurred image
+            img = svg.append('svg:image')
+                .attr({
+                    x: 0,
+                    y: 0,
+                    filter: 'url(#blur)',
+                    'xlink:href': imageUrl,
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    fill: '#336699'
+                })
 
-                svg.attr("width", width).attr("height", height);
-                img.attr("width", width).attr("height", height);
-                mask.attr("width", width).attr("height", height);
-            }
-            svg.on('mousemove', mouseMove);
-            resize();
-
+            //MASK
+            //  Add masked image (regular, non blurred image which will be revealed
+            mask = svg.append('svg:image')
+                .attr({
+                    x: 0,
+                    y: 0,
+                    'xlink:href': imageUrl,
+                    'mask': 'url(#mask)',
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    filter: 'url(#blur2)',
+                    fill: '#336699'
+                });
         } else {
             console.log("failed")
         }
     });
 
-});
+}
+
+function resize() {
+    width = window.innerWidth || e.clientWidth || g.clientWidth;;
+    height = window.innerHeight || e.clientHeight || g.clientHeight;
+
+    svg.attr("width", width).attr("height", height);
+    img.attr("width", width).attr("height", height);
+    mask.attr("width", width).attr("height", height);
+}
 </script>
