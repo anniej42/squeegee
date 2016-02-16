@@ -101,13 +101,13 @@ var addMask = function addMask(x, y, deg) {
     //     });
     var clip = clips.append('svg:rect')
         .attr({
-            x: x,
-            y: y,
             width: 125,
             height: 51,
             fill: '#ffffff',
-            'class': 'clipCircle'
+            'class': 'clipCircle',
+            "transform": "translate("+ x + "," + y + ") rotate("+deg+")"
         });
+
     return clip;
 };
 
@@ -146,13 +146,14 @@ filterBlur.append('feGaussianBlur')
 
 var enableHandler = true;
 
-timer = window.setInterval(function() {
-    enableHandler = true;
-}, 100);
+// timer = window.setInterval(function() {
+//     enableHandler = true;
+// }, 100);
 
+var cursorAngle;
 var mouseMove = function move(e) {
+    
     //erase on mouse over
-    var cursorAngle;
     if (enableHandler) {
         curPoint.x = d3.event.pageX
         curPoint.y = d3.event.pageY;
@@ -163,16 +164,11 @@ var mouseMove = function move(e) {
         var vector = new paper.Point(dx, dy);
         cursorAngle = vector.angle + 90;
 
-        // squeegee.css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
-        // squeegee.css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
-        // squeegee.css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
-        // squeegee.css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
-
         // TweenMax.to(sqicon, 0, {
         //     rotationZ: cursorAngle
         // });
 
-        sqicon.transition().attr("transform", "translate("+ curPoint.x + "," + curPoint.y + ") rotate("+cursorAngle+")");
+        sqicon.transition().duration(10).attr("transform", "translate("+ curPoint.x + "," + curPoint.y + ") rotate("+cursorAngle+")");
 
         // sqicon.attr("transform", "translate("+ dx + "," + dy + ")");
 
@@ -188,7 +184,7 @@ var mouseMove = function move(e) {
         // prevPoint = curPoint;
         prevPoint.x = curPoint.x;
         prevPoint.y = curPoint.y;
-        enableHandler = false;
+        // enableHandler = false;
 
     }
     // var curPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
