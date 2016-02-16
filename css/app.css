@@ -1,6 +1,6 @@
     #squeegee {
         position: absolute;
-        z-index: 20;
+        z-index: 99;
         /*top: 10%;*/
         background-image: url("cursor.png");
         width: 125px;

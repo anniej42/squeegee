@@ -9,22 +9,26 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/TweenMax.min.js"></script>
     <title>natie squeegee</title>
 </head>
 
 <body>
     <ul class="sub-nav menu" role="navigation" title="Filter Menu List">
         <li class="sub-nav-title">category</li>
-        <li id="" class="active">       <a>All</a></li>
-        <li id="Food">                  <a>Food</a></li>
-        <li id="Travel">                <a>Travel</a></li>
-        <li id="Street">                <a>Street</a></li>
-        <li id="Nature">                <a>Nature</a></li>
-        <li><input value="custom..."></input></li>
-        <li><button id="toggle"> toggle hot/cold shower </button></li>
+        <li id="" class="active"> <a>All</a></li>
+        <li id="Food"> <a>Food</a></li>
+        <li id="Travel"> <a>Travel</a></li>
+        <li id="Street"> <a>Street</a></li>
+        <li id="Nature"> <a>Nature</a></li>
+        <li>
+            <input value="custom..."></input>
+        </li>
+        <li>
+            <button id="toggle"> toggle hot/cold shower </button>
+        </li>
     </ul>
     <div>
-        
     </div>
     <div id="view"></div>
     <div id="squeegee">
@@ -86,12 +90,15 @@ var addMask = function addMask(x, y) {
     return clip;
 };
 
-$("li").on("click", function(){
-  $("li").removeClass("active");
-  $(this).addClass("active")
-  var category = $(this).attr("id");
-  console.log(category)
-  _500px.api('/photos', 'get', {
+$("li").on("click", function() {
+    // svg.html("");
+    svg.selectAll("image").remove();
+    $("li").removeClass("active");
+    $(this).addClass("active")
+    var category = $(this).attr("id");
+
+    console.log(category)
+    _500px.api('/photos', 'get', {
         rpp: 20,
         "feature": "editor",
         "image_size": "2048",
@@ -99,7 +106,8 @@ $("li").on("click", function(){
         "exclude": "People, Nude"
     }, function(response) {
         if (response.success) {
-          console.log(response)
+            console.log(response)
+            d3.select("image").remove();
             var i = Math.floor(Math.random() * 20);
             imageUrl = response.data.photos[i].image_url;
             //Add blurred image
@@ -145,26 +153,46 @@ filterBlur.append('feGaussianBlur')
         'stdDeviation': blurAmount
     });
 
+var enableHandler = true;
+
+timer = window.setInterval(function() {
+    enableHandler = true;
+}, 200);
+
 var mouseMove = function move(e) {
     //erase on mouse over
 
+    if (enableHandler) {
+        curPoint.x = d3.event.pageX
+        curPoint.y = d3.event.pageY;
+
+        var vector = new paper.Point(curPoint.x - prevPoint.x, curPoint.y - prevPoint.y);
+        var cursorAngle = vector.angle + 90;
+
+        // squeegee.css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
+        // squeegee.css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
+        // squeegee.css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
+        // squeegee.css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
+
+        TweenMax.to(squeegee, 0, {
+            rotationZ: cursorAngle
+        });
+
+        // squeegee.css("left", curPoint.x);
+        // squeegee.css("top", curPoint.y);
+        // TweenMax.to(squeegee, 0.1, {x:curPoint.x-prevPoint.x, y:curPoint.y-prevPoint.y});
+        TweenMax.to(squeegee, 0, {
+            left: curPoint.x,
+            top: curPoint.y
+        });
+
+        // prevPoint = curPoint;
+        prevPoint.x = curPoint.x;
+        prevPoint.y = curPoint.y;
+        enableHandler = false;
+
+    }
     // var curPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
-    curPoint.x = d3.event.pageX
-    curPoint.y = d3.event.pageY;
-    var vector = new paper.Point(curPoint.x - prevPoint.x, curPoint.y - prevPoint.y);
-    var cursorAngle = vector.angle + 90;
-
-    squeegee.css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
-    squeegee.css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
-    squeegee.css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
-    squeegee.css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
-
-    squeegee.css("left", curPoint.x);
-    squeegee.css("top", curPoint.y);
-
-    // prevPoint = curPoint;
-    prevPoint.x = curPoint.x;
-    prevPoint.y = curPoint.y;
 
     var x = parseInt(d3.event.pageX - 25 + circleRadius / 2, 10);
     var y = parseInt(d3.event.pageY - 25 - circleRadius, 10);
