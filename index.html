@@ -72,6 +72,16 @@ $("#toggle").click(function() {
     }
 });
 
+var cursor = d3.select("body").append("svg").attr("id", "cursor")
+console.log(cursor);
+
+sqicon = cursor.append('svg:image')
+            .attr({
+                'xlink:href': "http://localhost:8080/css/cursor.png",
+                width: 125,
+                height: 51,
+            })
+
 //CLIP
 var clips = svg.append('svg:defs')
     .append('svg:mask')
@@ -79,13 +89,22 @@ var clips = svg.append('svg:defs')
         id: 'mask'
     });
 
-var addMask = function addMask(x, y) {
+var addMask = function addMask(x, y, deg) {
     //To achieve the unblur effect, we add circles to the clip mask
-    var clip = clips.append('svg:circle')
+    // var clip = clips.append('svg:circle')
+    //     .attr({
+    //         cx: x,
+    //         cy: y,
+    //         r: circleRadius,
+    //         fill: '#ffffff',
+    //         'class': 'clipCircle'
+    //     });
+    var clip = clips.append('svg:rect')
         .attr({
-            cx: x,
-            cy: y,
-            r: circleRadius,
+            x: x,
+            y: y,
+            width: 125,
+            height: 51,
             fill: '#ffffff',
             'class': 'clipCircle'
         });
@@ -103,12 +122,12 @@ $(".category").on("click", function() {
     getImage(category)
 })
 
-$("input").keyup(function (e) {
+$("input").keyup(function(e) {
+  svg.selectAll("image").remove();
     if (e.keyCode == 13) {
         svg.selectAll("image").remove();
         $(".category").removeClass("active");
         var category = $(this).val();
-        console.log(category)
         searchImage(category);
     }
 });
@@ -129,35 +148,42 @@ var enableHandler = true;
 
 timer = window.setInterval(function() {
     enableHandler = true;
-}, 200);
-
+}, 100);
 
 var mouseMove = function move(e) {
     //erase on mouse over
-
+    var cursorAngle;
     if (enableHandler) {
         curPoint.x = d3.event.pageX
         curPoint.y = d3.event.pageY;
 
-        var vector = new paper.Point(curPoint.x - prevPoint.x, curPoint.y - prevPoint.y);
-        var cursorAngle = vector.angle + 90;
+        dx = curPoint.x - prevPoint.x
+        dy = curPoint.y - prevPoint.y
+
+        var vector = new paper.Point(dx, dy);
+        cursorAngle = vector.angle + 90;
 
         // squeegee.css('-moz-transform', 'rotate(' + cursorAngle + 'deg)');
         // squeegee.css('-webkit-transform', 'rotate(' + cursorAngle + 'deg)');
         // squeegee.css('-o-transform', 'rotate(' + cursorAngle + 'deg)');
         // squeegee.css('-ms-transform', 'rotate(' + cursorAngle + 'deg)');
 
-        TweenMax.to(squeegee, 0, {
-            rotationZ: cursorAngle
-        });
+        // TweenMax.to(sqicon, 0, {
+        //     rotationZ: cursorAngle
+        // });
 
+        sqicon.transition().attr("transform", "translate("+ curPoint.x + "," + curPoint.y + ") rotate("+cursorAngle+")");
+
+        // sqicon.attr("transform", "translate("+ dx + "," + dy + ")");
+
+//.attr("x", curPoint.x).attr("y", curPoint.y)
         // squeegee.css("left", curPoint.x);
         // squeegee.css("top", curPoint.y);
         // TweenMax.to(squeegee, 0.1, {x:curPoint.x-prevPoint.x, y:curPoint.y-prevPoint.y});
-        TweenMax.to(squeegee, 0, {
-            left: curPoint.x,
-            top: curPoint.y
-        });
+        // TweenMax.to(squeegee, 0, {
+        //     left: curPoint.x,
+        //     top: curPoint.y
+        // });
 
         // prevPoint = curPoint;
         prevPoint.x = curPoint.x;
@@ -171,7 +197,7 @@ var mouseMove = function move(e) {
     var y = parseInt(d3.event.pageY - 25 - circleRadius, 10);
 
     //Add mask
-    var clip = addMask(x, y);
+    var clip = addMask(x, y, cursorAngle);
 
     clip.transition().ease(clipEase)
         .delay(clipDelay)
@@ -206,85 +232,56 @@ function getImage(category) {
         "only": category,
         "exclude": "People, Nude"
     }, function(response) {
-        if (response.success) {
-            console.log(response)
-            d3.select("image").remove();
-            var i = Math.floor(Math.random() * 20);
-            imageUrl = response.data.photos[i].image_url;
-            //Add blurred image
-            img = svg.append('svg:image')
-                .attr({
-                    x: 0,
-                    y: 0,
-                    filter: 'url(#blur)',
-                    'xlink:href': imageUrl,
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    fill: '#336699'
-                })
-
-            //MASK
-            //  Add masked image (regular, non blurred image which will be revealed
-            mask = svg.append('svg:image')
-                .attr({
-                    x: 0,
-                    y: 0,
-                    'xlink:href': imageUrl,
-                    'mask': 'url(#mask)',
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    filter: 'url(#blur2)',
-                    fill: '#336699'
-                });
-        } else {
-            console.log("failed")
-        }
+        handleResponse(response)
     });
 }
 
-function searchImage(term){
-  _500px.api('/photos/search', 'get', {
+function searchImage(term) {
+    _500px.api('/photos/search', 'get', {
         rpp: 20,
         term: term,
         "feature": "editor",
         "image_size": "2048",
         "exclude": "People, Nude"
     }, function(response) {
-        if (response.success) {
-            console.log(response)
-            d3.select("image").remove();
-            var i = Math.floor(Math.random() * 20);
-            imageUrl = response.data.photos[i].image_url;
-            //Add blurred image
-            img = svg.append('svg:image')
-                .attr({
-                    x: 0,
-                    y: 0,
-                    filter: 'url(#blur)',
-                    'xlink:href': imageUrl,
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    fill: '#336699'
-                })
-
-            //MASK
-            //  Add masked image (regular, non blurred image which will be revealed
-            mask = svg.append('svg:image')
-                .attr({
-                    x: 0,
-                    y: 0,
-                    'xlink:href': imageUrl,
-                    'mask': 'url(#mask)',
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    filter: 'url(#blur2)',
-                    fill: '#336699'
-                });
-        } else {
-            console.log("failed")
-        }
+        handleResponse(response);
     });
+}
 
+function handleResponse(response) {
+    if (response.success) {
+        console.log(response)
+        // d3.select("image").remove();
+        var i = Math.floor(Math.random() * 20);
+        imageUrl = response.data.photos[i].image_url;
+        //Add blurred image
+        img = svg.append('svg:image')
+            .attr({
+                x: 0,
+                y: 0,
+                filter: 'url(#blur)',
+                'xlink:href': imageUrl,
+                width: window.innerWidth,
+                height: window.innerHeight,
+                fill: '#336699'
+            })
+
+        //MASK
+        //  Add masked image (regular, non blurred image which will be revealed
+        mask = svg.append('svg:image')
+            .attr({
+                x: 0,
+                y: 0,
+                'xlink:href': imageUrl,
+                'mask': 'url(#mask)',
+                width: window.innerWidth,
+                height: window.innerHeight,
+                filter: 'url(#blur2)',
+                fill: '#336699'
+            });
+    } else {
+        console.log("failed")
+    }
 }
 
 function resize() {
