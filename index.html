@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/TweenMax.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/TweenMax.min.js"></script> -->
     <title>natie squeegee</title>
 </head>
 
@@ -41,7 +41,7 @@
     </div>
 </body>
 <script>
-var svg = d3.select("div#view").append("svg");
+var svg = d3.select("div#view").append("svg").attr("id", "canvas");
 
 //Config
 var circleRadius = 100;
@@ -102,7 +102,7 @@ var addMask = function addMask(x, y, deg) {
     var clip = clips.append('svg:rect')
         .attr({
             width: 125,
-            height: 51,
+            height: 125,
             fill: '#ffffff',
             'class': 'clipCircle',
             "transform": "translate("+ x + "," + y + ") rotate("+deg+")"
@@ -168,7 +168,7 @@ var mouseMove = function move(e) {
         //     rotationZ: cursorAngle
         // });
 
-        sqicon.transition().duration(10).attr("transform", "translate("+ curPoint.x + "," + curPoint.y + ") rotate("+cursorAngle+")");
+        sqicon.attr("transform", "translate("+ curPoint.x + "," + curPoint.y + ") rotate("+cursorAngle+")");
 
         // sqicon.attr("transform", "translate("+ dx + "," + dy + ")");
 
@@ -189,11 +189,11 @@ var mouseMove = function move(e) {
     }
     // var curPoint = new paper.Point(d3.event.pageX, d3.event.pageY);
 
-    var x = parseInt(d3.event.pageX - 25 + circleRadius / 2, 10);
-    var y = parseInt(d3.event.pageY - 25 - circleRadius, 10);
+    // var x = parseInt(d3.event.pageX - 25 + circleRadius / 2, 10);
+    // var y = parseInt(d3.event.pageY - 25 - circleRadius, 10);
 
     //Add mask
-    var clip = addMask(x, y, cursorAngle);
+    var clip = addMask(curPoint.x, curPoint.y, cursorAngle);
 
     clip.transition().ease(clipEase)
         .delay(clipDelay)
