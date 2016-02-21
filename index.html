@@ -222,7 +222,7 @@ $(document).ready(function() {
 
 function getImage(category) {
     _500px.api('/photos', 'get', {
-        rpp: 20,
+        rpp: 5,
         "feature": "editor",
         "image_size": "2048",
         "only": category,
@@ -234,7 +234,7 @@ function getImage(category) {
 
 function searchImage(term) {
     _500px.api('/photos/search', 'get', {
-        rpp: 20,
+        rpp: 5,
         term: term,
         "feature": "editor",
         "image_size": "2048",
@@ -246,7 +246,7 @@ function searchImage(term) {
 
 function handleResponse(response) {
     if (response.success) {
-        var i = Math.floor(Math.random() * 20);
+        var i = Math.floor(Math.random() * 5);
         imageUrl = response.data.photos[i].image_url;
         //Add blurred image
         img = svg.append('svg:image')
