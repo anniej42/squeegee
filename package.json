@@ -1,0 +1,29 @@
+{
+  "name": "squeegee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ee": "^0.1.0",
+    "ee-first": "^1.1.1",
+    "express": "^4.13.4",
+    "google-images": "^1.0.0",
+    "ms": "^0.7.1",
+    "unpipe": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anniej42/squeegee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anniej42/squeegee/issues"
+  },
+  "homepage": "https://github.com/anniej42/squeegee"
+}
