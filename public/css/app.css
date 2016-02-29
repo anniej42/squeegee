@@ -18,13 +18,13 @@
     src: url("industry.ttf");
 }
 
-@font-face {
+/*@font-face {
     font-family: futuraExtraBold;
     src: url("futura extrabold oblique.ttf");
-}
+}*/
 
 .sub-nav {
-  font-family: futuraExtraBold;
+  font-family: futura;
 
   font-size: 1em;
     background-color: #f2f2f2;
