@@ -1,0 +1,66 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'wachify' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.35
+4 verbose cache add [ 'wachify', null ]
+5 verbose cache add name=undefined spec="wachify" args=["wachify",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'wachify',
+6 verbose parsed url   path: 'wachify',
+6 verbose parsed url   href: 'wachify' }
+7 silly lockFile 4379f84d-wachify wachify
+8 verbose lock wachify /Users/anniej/.npm/4379f84d-wachify.lock
+9 silly lockFile 4379f84d-wachify wachify
+10 silly lockFile 4379f84d-wachify wachify
+11 verbose addNamed [ 'wachify', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 9d908f2d-wachify wachify@
+14 verbose lock wachify@ /Users/anniej/.npm/9d908f2d-wachify.lock
+15 silly addNameRange { name: 'wachify', range: '*', hasData: false }
+16 verbose request where is /wachify
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id 05e98ac07f9c97d8
+19 verbose url raw /wachify
+20 verbose url resolving [ 'https://registry.npmjs.org/', './wachify' ]
+21 verbose url resolved https://registry.npmjs.org/wachify
+22 verbose request where is https://registry.npmjs.org/wachify
+23 info trying registry request attempt 1 at 10:31:04
+24 http GET https://registry.npmjs.org/wachify
+25 http 404 https://registry.npmjs.org/wachify
+26 silly registry.get cb [ 404,
+26 silly registry.get   { 'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=0',
+26 silly registry.get     'content-length': '2',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     date: 'Mon, 29 Feb 2016 08:31:05 GMT',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '0',
+26 silly registry.get     connection: 'keep-alive',
+26 silly registry.get     'x-served-by': 'cache-ams4143-AMS',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1456734664.701505,VS0,VE688' } ]
+27 silly lockFile 9d908f2d-wachify wachify@
+28 silly lockFile 9d908f2d-wachify wachify@
+29 error 404 Not Found
+29 error 404
+29 error 404 'wachify' is not in the npm registry.
+29 error 404 You should bug the author to publish it
+29 error 404
+29 error 404 Note that you can also install from a
+29 error 404 tarball, folder, or http url, or git url.
+30 error System Darwin 15.3.0
+31 error command "node" "/usr/local/bin/npm" "install" "-g" "wachify"
+32 error cwd /Users/anniej/Desktop/Dropbox (Personal)/Projects/natie/squeegee/js
+33 error node -v v0.10.35
+34 error npm -v 1.4.28
+35 error code E404
+36 verbose exit [ 1, true ]
