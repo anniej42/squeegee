@@ -13,7 +13,20 @@
     pointer-events: none;
 }
 
+@font-face {
+    font-family: industry;
+    src: url("industry.ttf");
+}
+
+@font-face {
+    font-family: futuraExtraBold;
+    src: url("futura extrabold oblique.ttf");
+}
+
 .sub-nav {
+  font-family: futuraExtraBold;
+
+  font-size: 1em;
     background-color: #f2f2f2;
     padding: 0.5rem 0.5rem 0.5rem 0;
 }

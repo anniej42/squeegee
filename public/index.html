@@ -27,9 +27,6 @@
             <!-- <div id="placeButton"></div> -->
             <!-- <input id="submit" type="submit"></input> -->
         </li>
-        <li>
-            <button id="toggle"> toggle hot/cold shower </button>
-        </li>
     </ul>
     <div>
     </div>
@@ -65,27 +62,18 @@ var curPoint = {
 var cursorAngle;
 var squeegee = $("#squeegee")
 
-$("#toggle").click(function() {
-    mode = 1 - mode;
-    if (mode == 0) {
-        clipDuration = 20000;
-    } else {
-        clipDuration = 5;
-    }
-});
 
 var cursor = d3.select("body").append("svg").attr("id", "cursor");
 
 var sqicon = cursor.append('svg:image')
     .attr({
-        'xlink:href': "http://anniejiao.me/squeegee/css/cursor.png",
+        'xlink:href': "/css/cursor.png",
         width: 100,
         height: 40,
     })
 
 function google(category) {
   category = category.replace("_", " ");
-    console.log("Starting");
     // $.get(
     //     window.location.origin + '/getURL',
     //     function(data) {
