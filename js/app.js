@@ -51,7 +51,7 @@ $(document).ready(function() {
         });
 
     var addMask = function addMask(x, y, deg) {
-        //To achieve the unblur effect, we add circles to the clip mask
+        // circle blur
         var clip = clips.append('svg:circle')
             .attr({
                 cx: x,
@@ -109,28 +109,31 @@ $(document).ready(function() {
     var enableHandler = true;
 
     var cursorAngle;
+    var rotateCounter =0;
     var mouseMove = function move(e) {
+      rotateCounter = (rotateCounter+1)%18;
 
         //erase on mouse over
         if (enableHandler) {
             curPoint.x = d3.event.pageX
             curPoint.y = d3.event.pageY;
 
-            dx = curPoint.x - prevPoint.x
-            dy = curPoint.y - prevPoint.y
+            // dx = curPoint.x - prevPoint.x
+            // dy = curPoint.y - prevPoint.y
+            // var vector = new paper.Point(dx, dy);
+            // cursorAngle = vector.angle + 90;
 
-            var vector = new paper.Point(dx, dy);
-            cursorAngle = vector.angle + 90;
-
-            // TweenMax.to(sqicon, 0, {
-            //     rotationZ: cursorAngle
+            // sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + cursorAngle + ")");
+            sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + rotateCounter*20 + ")");
+            // sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ")");
+            // var t0 = Date.now();
+            // d3.timer(function() {
+            //     var delta = (Date.now() - t0);
+            //     sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + delta * 2 / 200 + ")");
+            //     // sqicon.attr("transform", function(d) {
+            //     //     return "rotate(" + delta * 2 / 200 + ")";
+            //     // });
             // });
-
-            sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + cursorAngle + ")");
-
-            // sqicon.attr("transform", "translate("+ dx + "," + dy + ")");
-
-            // prevPoint = curPoint;
             prevPoint.x = curPoint.x;
             prevPoint.y = curPoint.y;
             // enableHandler = false;
