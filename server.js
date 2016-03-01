@@ -16,6 +16,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 app.use(express.static(__dirname + '/public'));
 app.enable('view cache');
 
+app.use('/scripts', express.static(__dirname + '/node_modules/semantic-ui-css/'));
+
 
 app.post('/getURL', function(req, res) {
     var cat = req.body.category;

@@ -42,13 +42,6 @@
     padding-left: 1rem;
 }
 
-.sub-nav li.active a {
-    border-radius: 5px;
-    border: 2px solid #2199e8;
-    color: black;
-    cursor: default;
-    padding: 0.12rem 0.6rem;
-}
 
 input {
     padding: 5px;
