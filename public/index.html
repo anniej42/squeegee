@@ -103,8 +103,8 @@ var addMask = function addMask(x, y, deg) {
     // circle blur
     var clip = clips.append('svg:circle')
         .attr({
-            cx: x,
-            cy: y,
+            cx: x+50,
+            cy: y+50,
             r: circleRadius,
             fill: '#ffffff',
             'class': 'clipCircle'
@@ -138,9 +138,10 @@ $("input").keyup(function(e) {
     svg.selectAll("image").remove();
     if (e.keyCode == 13) {
         svg.selectAll("image").remove();
+        svg.selectAll(".clipCircle").remove();
         $(".category").removeClass("active");
         var category = $(this).val();
-        searchImage(category);
+        google(category)
     }
 });
 
@@ -198,10 +199,10 @@ var mouseMove = function move(e) {
 };
 
 $(document).ready(function() {
-    _500px.init({
-        sdk_key: 'ff6d61fac0e96e8c54f17f9bef8674230426f07e',
-        "consumer_key": "toNzUXsgWhv6knJFYzFEaALwZyJosUTAAta9Rh3D"
-    });
+    // _500px.init({
+    //     sdk_key: 'ff6d61fac0e96e8c54f17f9bef8674230426f07e',
+    //     "consumer_key": "toNzUXsgWhv6knJFYzFEaALwZyJosUTAAta9Rh3D"
+    // });
     // getImage(" ");
     google("majestic landscape")
     $(window).resize(resize);
@@ -211,29 +212,29 @@ $(document).ready(function() {
 
 });
 
-function getImage(category) {
-    _500px.api('/photos', 'get', {
-        rpp: 5,
-        "feature": "editor",
-        "image_size": "2048",
-        "only": category,
-        "exclude": "People, Nude"
-    }, function(response) {
-        handleResponse(response)
-    });
-}
+// function getImage(category) {
+//     _500px.api('/photos', 'get', {
+//         rpp: 5,
+//         "feature": "editor",
+//         "image_size": "2048",
+//         "only": category,
+//         "exclude": "People, Nude"
+//     }, function(response) {
+//         handleResponse(response)
+//     });
+// }
 
-function searchImage(term) {
-    _500px.api('/photos/search', 'get', {
-        rpp: 5,
-        term: term,
-        "feature": "editor",
-        "image_size": "2048",
-        "exclude": "People, Nude"
-    }, function(response) {
-        handleResponse(response);
-    });
-}
+// function searchImage(term) {
+//     _500px.api('/photos/search', 'get', {
+//         rpp: 5,
+//         term: term,
+//         "feature": "editor",
+//         "image_size": "2048",
+//         "exclude": "People, Nude"
+//     }, function(response) {
+//         handleResponse(response);
+//     });
+// }
 
 function handleResponse(response) {
     if (response.success) {
@@ -270,7 +271,6 @@ function handleResponse(response) {
 }
 
 function putImage(url) {
-
     img = svg.append('svg:image')
         .attr({
             x: 0,
@@ -295,7 +295,6 @@ function putImage(url) {
             filter: 'url(#blur2)',
             fill: '#336699'
         });
-
 }
 
 
