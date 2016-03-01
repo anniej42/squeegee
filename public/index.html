@@ -8,27 +8,28 @@
     <script src="500px.js"></script>
     <!-- <script src="js/index.js"></script> -->
     <link rel="stylesheet" type="text/css" href="css/app.css">
-    <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+    <link rel="stylesheet" type="text/css" href="semantic.min.css">
+    <script src="semantic.min.js"></script>
     <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css"> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/TweenMax.min.js"></script> -->
     <title>natie squeegee</title>
 </head>
 
 <body>
-    <ul class="sub-nav menu" role="navigation" title="Filter Menu List">
-        <li class="sub-nav-title">category</li>
-        <li id="mildly_interesting" class="category active"> <a>All</a></li>
-        <li class="category" id="gourmet_Food"> <a>Food</a></li>
-        <li class="category" id="Travel"> <a>Travel</a></li>
-        <li class="category" id="Street"> <a>Street</a></li>
-        <li class="category" id="majestic_landscapes"> <a>Nature</a></li>
-        <li id="customField">
-            <input id="custom" placeholder="custom..."></input>
-            <!-- <div id="placeButton"></div> -->
-            <!-- <input id="submit" type="submit"></input> -->
-        </li>
-    </ul>
-    <div>
+    <div class="header">
+        <div class="ui secondary  menu">
+            <a class="category active item"   id="mildly_interesting"> ALL </a>
+            <a class="category item"          id="gourmet_food"> FOOD </a>
+            <a class="category item"          id="travel"> TRAVEL </a>
+            <a class="category item"          id="street_photography"> STREET </a>
+            <a class="category item"          id="majestic_landscapes"> NATURE </a>
+            <div class="item">
+                <div id="customField" class="ui icon input">
+                    <input id="custom" type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="view"></div>
     <div id="squeegee"> </div>
@@ -68,7 +69,7 @@ var sqicon = cursor.append('svg:image')
     })
 
 function google(category) {
-  category = category.replace("_", " ");
+    category = category.replace("_", " ");
     $.post(
         window.location.origin + '/getURL', {
             "category": category
@@ -91,8 +92,8 @@ var addMask = function addMask(x, y, deg) {
     // circle blur
     var clip = clips.append('svg:circle')
         .attr({
-            cx: x+50,
-            cy: y+50,
+            cx: x + 50,
+            cy: y + 50,
             r: circleRadius,
             fill: '#ffffff',
             'class': 'clipCircle'
