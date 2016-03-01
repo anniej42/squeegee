@@ -18,20 +18,26 @@
     src: url("industry.ttf");
 }
 
+
 /*@font-face {
     font-family: futuraExtraBold;
     src: url("futura extrabold oblique.ttf");
 }*/
 
-.sub-nav {
-  font-family: futura;
-  font-size: 1em;
-  color: #2f2f2f !important;
-  padding: 0.5rem 0.5rem 0.5rem 0;
+.menu {
+    font-family: futura !important;
+    font-size: 1em;
+    color: #2f2f2f !important;
+    padding-left: 5%;
+    top: 50%;
+    transform: translateY(50%);
+    -ms-transform: translateY(50%);
+    -moz-transform: translateY(50%);
+    -webkit-transform: translateY(50%);
+    -o-transform: translateY(50%);
 }
 
 .sub-nav li {
-    
     font-size: 0.8rem;
     padding-left: 1rem;
 }
@@ -54,13 +60,17 @@ input {
     margin-left: -50px;
 }
 
-.header{
-  height: 80px;
-  left: 0; right:0; top: 0; width: 100%;
-  position: absolute;
-  background-color: white;
-  opacity: 0.5
+.headerMenu {
+    height: 80px;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    position: absolute;
+    background-color: white;
+    opacity: 0.5
 }
+
 
 /*body{
 overflow: hidden;
