@@ -31,12 +31,7 @@
     <div>
     </div>
     <div id="view"></div>
-    <div id="squeegee">
-        <!-- <img id="cursor" src= "cursor.png"></img> -->
-        <!-- <div class="firefly"> -->
-        <!-- <div class="wings big one"></div> -->
-        <!-- </div> -->
-    </div>
+    <div id="squeegee"> </div>
 </body>
 <script>
 var svg = d3.select("div#view").append("svg").attr("id", "canvas");
@@ -74,13 +69,6 @@ var sqicon = cursor.append('svg:image')
 
 function google(category) {
   category = category.replace("_", " ");
-    // $.get(
-    //     window.location.origin + '/getURL',
-    //     function(data) {
-    //         // console.log(data);
-    //         console.log(data)
-    //     }
-    // );
     $.post(
         window.location.origin + '/getURL', {
             "category": category
@@ -157,31 +145,18 @@ filterBlur.append('feGaussianBlur')
         'stdDeviation': blurAmount
     });
 
-var enableHandler = true;
-
 var cursorAngle;
 var rotateCounter = 0;
 var mouseMove = function move(e) {
     rotateCounter = (rotateCounter + 1) % 18;
 
     //erase on mouse over
-    if (enableHandler) {
-        curPoint.x = d3.event.pageX
-        curPoint.y = d3.event.pageY;
+    curPoint.x = d3.event.pageX
+    curPoint.y = d3.event.pageY;
 
-        // dx = curPoint.x - prevPoint.x
-        // dy = curPoint.y - prevPoint.y
-        // var vector = new paper.Point(dx, dy);
-        // cursorAngle = vector.angle + 90;
-
-        // sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + cursorAngle + ")");
-        sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + rotateCounter * 20 + ")");
-        // sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ")");
-        prevPoint.x = curPoint.x;
-        prevPoint.y = curPoint.y;
-        // enableHandler = false;
-
-    }
+    sqicon.attr("transform", "translate(" + curPoint.x + "," + curPoint.y + ") rotate(" + rotateCounter * 20 + ")");
+    prevPoint.x = curPoint.x;
+    prevPoint.y = curPoint.y;
 
     //Add mask
     var clip = addMask(curPoint.x, curPoint.y, cursorAngle);
@@ -199,42 +174,11 @@ var mouseMove = function move(e) {
 };
 
 $(document).ready(function() {
-    // _500px.init({
-    //     sdk_key: 'ff6d61fac0e96e8c54f17f9bef8674230426f07e',
-    //     "consumer_key": "toNzUXsgWhv6knJFYzFEaALwZyJosUTAAta9Rh3D"
-    // });
-    // getImage(" ");
     google("mildly interesting")
     $(window).resize(resize);
     svg.on('mousemove', mouseMove);
     resize();
-
-
 });
-
-// function getImage(category) {
-//     _500px.api('/photos', 'get', {
-//         rpp: 5,
-//         "feature": "editor",
-//         "image_size": "2048",
-//         "only": category,
-//         "exclude": "People, Nude"
-//     }, function(response) {
-//         handleResponse(response)
-//     });
-// }
-
-// function searchImage(term) {
-//     _500px.api('/photos/search', 'get', {
-//         rpp: 5,
-//         term: term,
-//         "feature": "editor",
-//         "image_size": "2048",
-//         "exclude": "People, Nude"
-//     }, function(response) {
-//         handleResponse(response);
-//     });
-// }
 
 function handleResponse(response) {
     if (response.success) {
