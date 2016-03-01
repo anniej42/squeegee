@@ -39,12 +39,13 @@ app.post('/getURL', function(req, res) {
             imgURLs.push(resp.items[i].link);
         }
         var i = ~~(Math.random() * 10);
-        for (var j = 0; j < 10; j++) {
+
+        for (var j = 10; j > 0; j--) {
             request(imgURLs[i], function(error, response, body) {
                 if (error) {
                     i = (i + 1) % 10;
                 } else if (response.statusCode == 200) {
-                    break;
+                    j=-1;
                 }
             })
         }
