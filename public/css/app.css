@@ -1,4 +1,4 @@
-#cursor {
+    #cursor {
     position: absolute;
     z-index: 99;
     /*top: 10%;*/
@@ -24,7 +24,7 @@
     src: url("futura extrabold oblique.ttf");
 }*/
 
-.menu {
+.ui.menu {
     font-family: futura !important;
     font-size: 1em;
     color: #2f2f2f !important;
@@ -36,12 +36,6 @@
     -webkit-transform: translateY(50%);
     -o-transform: translateY(50%);
 }
-
-.sub-nav li {
-    font-size: 0.8rem;
-    padding-left: 1rem;
-}
-
 
 input {
     padding: 5px;
@@ -64,13 +58,13 @@ input {
     opacity: 0.5
 }
 
-
-/*body{
+.pageLink {
+    font-family: "futura-extrabold", futura-pt, 'Futura Std', Futura, Arial, sans-serif;
+  }
+    /*body{
 overflow: hidden;
 }*/
-
-
-/*
+    /*
 svg{
 position: absolute;
 margin-top: 55px;
