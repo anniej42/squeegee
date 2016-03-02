@@ -39,7 +39,7 @@
 var svg = d3.select("div#view").append("svg").attr("id", "canvas");
 
 //Config
-var circleRadius = 100;
+var circleRadius = 50;
 var blurAmount = 20;
 var clipDelay = 200;
 var mode = 0;
@@ -93,8 +93,8 @@ var addMask = function addMask(x, y, deg) {
     // circle blur
     var clip = clips.append('svg:circle')
         .attr({
-            cx: x + 50,
-            cy: y + 50,
+            cx: x,
+            cy: y,
             r: circleRadius,
             fill: '#ffffff',
             'class': 'clipCircle'
@@ -120,12 +120,10 @@ $(".category").on("click", function() {
     $(".category").removeClass("active");
     $(this).addClass("active")
     var category = $(this).attr("id");
-    // getImage(category)
     google(category)
 })
 
 $("input").keyup(function(e) {
-    svg.selectAll("image").remove();
     if (e.keyCode == 13) {
         svg.selectAll("image").remove();
         svg.selectAll(".clipCircle").remove();
@@ -176,7 +174,7 @@ var mouseMove = function move(e) {
 };
 
 $(document).ready(function() {
-    google("mildly interesting")
+    google("mildly interesting");
     $(window).resize(resize);
     svg.on('mousemove', mouseMove);
     resize();
