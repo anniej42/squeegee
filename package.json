@@ -8,6 +8,7 @@
     "express": "^4.13.4",
     "google-images": "^1.0.0",
     "googleapis": "^2.1.7",
+    "nprogress": "^0.2.0",
     "request": "^2.69.0",
     "semantic-ui-css": "^2.1.8"
   },

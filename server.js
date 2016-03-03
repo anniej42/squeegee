@@ -16,7 +16,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 app.use(express.static(__dirname + '/public'));
 app.enable('view cache');
 
-app.use('/scripts', express.static(__dirname + '/node_modules/semantic-ui-css/'));
+app.use('/semantic', express.static(__dirname + '/node_modules/semantic-ui-css'));
+app.use('/nprogress', express.static(__dirname + '/node_modules/nprogress'));
 
 
 app.post('/getURL', function(req, res) {
@@ -40,12 +41,12 @@ app.post('/getURL', function(req, res) {
         for (var i = 0; i < resp.items.length; i++) {
             imgURLs.push(resp.items[i].link);
         }
-        var i = ~~(Math.random() * 10);
+        var i = ~~(Math.random() * resp.items.length);
 
         for (var j = 10; j > 0; j--) {
             request(imgURLs[i], function(error, response, body) {
                 if (error) {
-                    i = (i + 1) % 10;
+                    i = (i + 1) % resp.items.length;
                 } else if (response.statusCode == 200) {
                     j=-1;
                 }

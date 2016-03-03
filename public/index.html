@@ -8,8 +8,11 @@
     <script src="500px.js"></script>
     <!-- <script src="js/index.js"></script> -->
     <link rel="stylesheet" type="text/css" href="css/app.css">
-    <link rel="stylesheet" type="text/css" href="scripts/semantic.min.css">
-    <script src="scripts/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="nprogress/nprogress.css">
+    <script src="nprogress/nprogress.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+    <script src="semantic/semantic.min.js"></script>
     <title>natie squeegee</title>
 </head>
 
@@ -81,6 +84,13 @@ function google(category) {
         }
     );
 }
+
+$(document).ajaxStart(function() {
+    NProgress.start();
+});
+$(document).ajaxStop(function() {
+    NProgress.done();
+});
 
 //CLIP
 var clips = svg.append('svg:defs')
@@ -174,7 +184,7 @@ var mouseMove = function move(e) {
 };
 
 $(document).ready(function() {
-    google("mildly interesting");
+    // google("mildly interesting");
     $(window).resize(resize);
     svg.on('mousemove', mouseMove);
     resize();
