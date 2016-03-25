@@ -61,8 +61,6 @@ var curPoint = {
 };
 var cursorAngle;
 var squeegee = $("#squeegee")
-
-
 var cursor = d3.select("body").append("svg").attr("id", "cursor");
 
 var sqicon = cursor.append('svg:image')
@@ -72,6 +70,7 @@ var sqicon = cursor.append('svg:image')
         height: 40,
     })
 
+// post request to the server to get images
 function google(category) {
     category = category.replace("_", " ");
     $.post(
@@ -85,6 +84,7 @@ function google(category) {
     );
 }
 
+// add loading bar
 $(document).ajaxStart(function() {
     NProgress.start();
 });
@@ -92,7 +92,7 @@ $(document).ajaxStop(function() {
     NProgress.done();
 });
 
-//CLIP
+// create the cleaning effects
 var clips = svg.append('svg:defs')
     .append('svg:mask')
     .attr({
@@ -109,21 +109,12 @@ var addMask = function addMask(x, y, deg) {
             fill: '#ffffff',
             'class': 'clipCircle'
         });
-    // var clip = clips.append('svg:rect')
-    //     .attr({
-    //         width: 125,
-    //         height: 60,
-    //         fill: '#ffffff',
-    //         'class': 'clipCircle',
-    //         "transform": "translate("+ x + "," + y + ") rotate("+deg+")"
-    //     });
-
     return clip;
 };
 
+// switch categories, clear svg and google new category
 
 $(".category").on("click", function() {
-    // svg.html("");
     svg.selectAll("image").remove();
     svg.selectAll(".clipCircle").remove();
 
@@ -133,6 +124,7 @@ $(".category").on("click", function() {
     google(category)
 })
 
+// on enter, search with text
 $("input").keyup(function(e) {
     if (e.keyCode == 13) {
         svg.selectAll("image").remove();
@@ -155,8 +147,8 @@ filterBlur.append('feGaussianBlur')
         'stdDeviation': blurAmount
     });
 
-var cursorAngle;
 var rotateCounter = 0;
+
 var mouseMove = function move(e) {
     rotateCounter = (rotateCounter + 1) % 18;
 
@@ -184,45 +176,11 @@ var mouseMove = function move(e) {
 };
 
 $(document).ready(function() {
-    google("mildly interesting");
+    google("mildly interesting"); // default category
     $(window).resize(resize);
     svg.on('mousemove', mouseMove);
     resize();
 });
-
-function handleResponse(response) {
-    if (response.success) {
-        var i = Math.floor(Math.random() * 5);
-        imageUrl = response.data.photos[i].image_url;
-        //Add blurred image
-        img = svg.append('svg:image')
-            .attr({
-                x: 0,
-                y: 0,
-                filter: 'url(#blur)',
-                'xlink:href': imageUrl,
-                width: window.innerWidth,
-                height: window.innerHeight,
-                fill: '#336699'
-            })
-
-        //MASK
-        //  Add masked image (regular, non blurred image which will be revealed
-        mask = svg.append('svg:image')
-            .attr({
-                x: 0,
-                y: 0,
-                'xlink:href': imageUrl,
-                'mask': 'url(#mask)',
-                width: window.innerWidth,
-                height: window.innerHeight,
-                filter: 'url(#blur2)',
-                fill: '#336699'
-            });
-    } else {
-        console.log("failed")
-    }
-}
 
 function putImage(url) {
     img = svg.append('svg:image')
