@@ -1,21 +1,21 @@
+
 # squeegee
 
 clean a blurry glass window to reveal something special.
 
 ## Specifications
-this app is written in front-end javascript, uses and `d3.js` and hosted on github pages.  
+this app is written in front-end javascript, uses and `d3.js`, and is routed using `express`.  
+the server is written in `node.js` and hosted on `heroku`.  
 
 images use the google custom search engine API.  
 
-note that the main branch (production branch) is `gh-pages`.
-
 ## Installation
-`clone` the repository. 
 
-`cd` into the cloned repository, and run `python -m Simple` to install dependencies.
+first install `node` homebrew, by running `brew install node`, or downloading the installer from <https://nodejs.org/>.  
+
+`cd` into the cloned repository, and run `npm install` to install dependencies.
 
 ## Usage
-in terminal, start a simple HTTP server using `python -m SimpleHTTPServer`.  
+to start the app locally, type `npm start` or `heroku local` if heroku is installed.
 
-or, if the the `npm` package `http-server` is installed, just run `http-server`.  
-go to `localhost:8000` or the port specified by the console output.
+to push to heroku, create a heroku account, install the heroku toolbelt, and follow instructions on https://devcenter.heroku.com/articles/deploying-nodejs.
