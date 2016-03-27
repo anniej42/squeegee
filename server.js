@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 app.use(express.static(__dirname + '/public'));
 app.enable('view cache');
 
+// sets up public static routes
 app.use('/semantic', express.static(__dirname + '/node_modules/semantic-ui-css'));
 app.use('/nprogress', express.static(__dirname + '/node_modules/nprogress'));
 
