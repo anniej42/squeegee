@@ -81,7 +81,7 @@ $(function() {
         $(".category").removeClass("active");
         $(this).addClass("active")
         var category = $(this).attr("id");
-        google(category)
+        google(category);
     })
 
     // on enter, search with text
@@ -91,7 +91,7 @@ $(function() {
             svg.selectAll(".clipCircle").remove();
             $(".category").removeClass("active");
             var category = $(this).val();
-            google(category)
+            google(category);
         }
     });
 
@@ -140,6 +140,7 @@ $(function() {
         $(window).resize(resize);
         svg.on('mousemove', mouseMove);
         resize();
+        $("#share").on("click", share_page);
     });
 
     function putImage(url) {
@@ -176,5 +177,10 @@ $(function() {
         svg.attr("width", width).attr("height", height);
         img.attr("width", width).attr("height", height);
         mask.attr("width", width).attr("height", height);
+    }
+
+    function share_page() {
+        var fbpopup = window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, "pop", "width=600, height=400, scrollbars=no");
+        return false;
     }
 });

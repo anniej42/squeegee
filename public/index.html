@@ -8,14 +8,22 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="nprogress/nprogress.css">
     <script src="nprogress/nprogress.js"></script>
-    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
-    <script src="semantic/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
     <title>natie squeegee</title>
 </head>
 
 <body>
-    <div class="headerMenu">
-        <div class="ui secondary menu">
+    <!-- <div class="headerMenu"> -->
+    <div class="ui secondary fixed menu">
+        <div class="left menu">
+            <div class="item">
+                <div class="ui tiny image">
+                    <a href="http://natie.com">
+                        <img src="logo.png" class="logo"></img>
+                    </a>
+                </div>
+            </div>
             <div class="header item">CATEGORY</div>
             <a class="category active item" id="mildly_interesting"> ALL </a>
             <a class="category item" id="gourmet_food"> FOOD </a>
@@ -28,10 +36,19 @@
                     <i class="search icon"></i>
                 </div>
             </div>
-            <div class="right menu">
-                <div class="ui item pageLink"> NATIE/LABS/SQUEEGEE </div>
+        </div>
+        <div class="right menu">
+            <div class="ui item pageLink"> NATIE/LABS/SQUEEGEE </div>
+            <div class="item">
+                <button class="circular ui icon blue basic button" id="share" data-content="share">
+                    <i class="icon facebook"></i>
+                </button>
             </div>
         </div>
+    </div>
+    <!-- </div> -->
+    <div class="container">
         <div id="view"></div>
-        <div id="squeegee"> </div>
+    </div>
+    <div id="squeegee"> </div>
 </body>
