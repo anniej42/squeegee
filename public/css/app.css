@@ -19,22 +19,21 @@
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-.logo {
-    /*height: 6vh;*/
-    padding: 2.5vh;
-    /*z-index: 25;*/
-}
-
 .container {
     margin-top: 50px;
 }
 
 .pageLink {
-    font-family: "futura-extrabold", futura-pt, 'Futura Std', Futura, Arial, sans-serif;
+    font-family: futura-pt, 'Futura Std', Futura, Arial, sans-serif;
 }
 
 body {
     overflow: hidden;
+}
+
+h5 {
+    font-style: italic;
+    z-index: 30;
 }
 
 .footer {
